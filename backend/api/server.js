@@ -15,4 +15,10 @@ app.get('/', (req, res) => {
 
 app.listen(config.port, () => {
   console.log(`Server is running on port ${config.port}`);
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('Internal error:', err);
+  res.status(500).json({ error: err.message || 'Internal server error' });
 }); 

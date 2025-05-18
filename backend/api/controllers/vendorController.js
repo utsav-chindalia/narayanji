@@ -7,7 +7,7 @@ const vendorService = require('../services/vendorService');
  * Body: { phone: string }
  * Response: { allowed: boolean }
  */
-exports.checkVendor = async (req, res) => {
+exports.checkVendor = async (req, res, next) => {
   const { phone } = req.body;
   if (!phone) {
     return res.status(400).json({ error: 'Phone is required' });
@@ -16,6 +16,6 @@ exports.checkVendor = async (req, res) => {
     const allowed = await vendorService.isVendorAllowed(phone);
     res.json({ allowed });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    next(error);
   }
 }; 
