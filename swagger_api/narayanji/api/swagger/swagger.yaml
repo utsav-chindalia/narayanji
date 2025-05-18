@@ -1,0 +1,297 @@
+swagger: '2.0'
+info:
+  title: Narayan Ji Gajak DMS API
+  version: 1.0.0
+  description: API specification for the Distribution Management System MVP
+
+host: api.narayanjigajak.in
+schemes:
+  - https
+basePath: /
+
+securityDefinitions:
+  supabaseAuth:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: supabase Bearer token
+
+security:
+  - supabaseAuth: []
+
+paths:
+  /auth/session:
+    post:
+      summary: Sync vendor session after supabase login
+      security:
+        - supabaseAuth: []
+      responses:
+        200:
+          description: Authenticated vendor profile
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              user:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  pricingTier:
+                    type: string
+
+  /catalog:
+    get:
+      summary: Get vendor-specific product catalog
+      security:
+        - supabaseAuth: []
+      responses:
+        200:
+          description: Product list
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                sku:
+                  type: string
+                name:
+                  type: string
+                boxWeightGrams:
+                  type: number
+                imageUrl:
+                  type: string
+                pricePerKg:
+                  type: number
+
+  /cart:
+    post:
+      summary: Submit cart for admin review
+      security:
+        - supabaseAuth: []
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    sku:
+                      type: string
+                    quantityKg:
+                      type: number
+      responses:
+        200:
+          description: Cart submission successful
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              orderId:
+                type: string
+
+  /orders/{orderId}/review:
+    put:
+      summary: Admin reviews and edits the order quantities
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    sku:
+                      type: string
+                    approvedQuantityKg:
+                      type: number
+      responses:
+        200:
+          description: Order reviewed
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              message:
+                type: string
+
+  /orders/{orderId}/confirm:
+    post:
+      summary: Confirm and initiate payment
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Payment URL returned
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              paymentUrl:
+                type: string
+
+  /webhook/payment:
+    post:
+      summary: Handle payment webhook from Razorpay
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              order_id:
+                type: string
+              status:
+                type: string
+      responses:
+        200:
+          description: Webhook received
+          schema:
+            type: object
+            properties:
+              received:
+                type: boolean
+
+  /work-orders:
+    get:
+      summary: Get all work orders for warehouse team
+      security:
+        - supabaseAuth: []
+      responses:
+        200:
+          description: List of work orders
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                workOrderId:
+                  type: string
+                vendor:
+                  type: string
+                sku:
+                  type: string
+                quantityKg:
+                  type: number
+                batchCode:
+                  type: string
+                status:
+                  type: string
+
+  /orders/{orderId}/status:
+    patch:
+      summary: Update status of order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          type: string
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+      responses:
+        200:
+          description: Status updated
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+
+    get:
+      summary: Get status of a specific order
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Current status of order
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              lastUpdated:
+                type: string
+
+  /orders:
+    get:
+      summary: Get all orders for the vendor
+      security:
+        - supabaseAuth: []
+      responses:
+        200:
+          description: List of vendor orders
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                orderId:
+                  type: string
+                status:
+                  type: string
+                totalWeight:
+                  type: number
+                createdAt:
+                  type: string
+
+  /api/check-vendor:
+    post:
+      summary: Check if the phone number belongs to an allowed vendor
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              phone:
+                type: string
+      responses:
+        200:
+          description: Vendor is allowed
+          schema:
+            type: object
+            properties:
+              allowed:
+                type: boolean
+        403:
+          description: Vendor not allowed
+          schema:
+            type: object
+            properties:
+              allowed:
+                type: boolean
