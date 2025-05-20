@@ -29,7 +29,7 @@ Response:
   "allowed": true / false 
 }
 
-Purpose: To check if a vendor’s phone number is allowed before triggering OTP login.
+Purpose: To check if a vendor's phone number is allowed before triggering OTP login.
 
 
 
@@ -42,9 +42,11 @@ Response:
   {
     "sku": "GZK-001",
     "name": "Til Sakri Gajak",
-    "boxWeightGrams": 500,
+    "category": "GAJAK",
+    "unitType": "PER_KG",
     "imageUrl": "https://cdn.com/gajak1.png",
-    "pricePerKg": 320
+    "pricePerKg": 320,
+    "gstPercent": 0.05
   }
 ]
 

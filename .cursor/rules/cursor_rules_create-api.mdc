@@ -1,0 +1,67 @@
+# Rule: create-api
+
+## Purpose
+Standardize the process for creating new API endpoints in the Narayan Ji Gajak DMS backend, ensuring consistency, security, and maintainability. Reference `backend/supabase/database_schema.md` for all database structure and field details.
+
+---
+
+## Steps
+
+1. **Check API Contract**
+   - Always check for an API contract (see `highlevel_docs/api_contract.md`) before starting.
+   - Always check supabase migration files to understand the database needed for the api.
+   - Confirm endpoint path, method, request/response structure, and authentication requirements.
+
+2. **Review Database Schema**
+   - Reference `backend/supabase/database_schema.md` for table and field names, types, and relationships.
+   - Use correct field names and respect constraints (PK, FK, not null, etc).
+
+3. **Follow Existing Patterns**
+   - Place business logic in `/services` (e.g., `catalogService.js`).
+   - Place request/response handling in `/controllers` (e.g., `catalogController.js`).
+   - Register new routes in `/routes` (create a new file if needed, and add to `index.js`).
+   - Use the existing authentication middleware for protected endpoints.
+
+4. **Service Layer**
+   - Use the shared Supabase client (`config/supabaseClient.js`) for all DB access.
+   - Write clear, documented functions for all business logic.
+   - Handle errors and propagate them to the controller.
+
+5. **Controller Layer**
+   - Validate input and handle errors gracefully.
+   - Use the service layer for all business logic.
+   - Return responses in the format specified by the API contract.
+
+6. **Routes**
+   - Use Express router, following the pattern in `routes/example.js` and `routes/vendor.js`.
+   - Register the new route in `routes/index.js`.
+
+7. **Testing**
+   - Add a test file in `/test` for the new endpoint.
+   - Mock Supabase and authentication as needed.
+   - Test for correct response structure and error handling.
+
+8. **HTTP Test File**
+   - Add a sample HTTP request for the new endpoint to `http_test/test.http`.
+   - Follow the format of existing tests, including appropriate headers and example payloads as per `http_test/readme.md` 
+
+9. **General**
+   - Keep files under 300 lines; refactor if needed.
+   - Avoid code duplication; reuse existing logic where possible.
+   - Update documentation if new tables or fields are introduced.
+
+10. **Library use**
+    - Check the package.json in the parent directory recursively of the attached file for existing libraries or to add new libraries.
+    - Before creating new package.json ask for path file.
+
+---
+
+## References
+- API contract: `highlevel_docs/api_contract.md`
+- Database schema: `backend/supabase/database_schema.md`
+- Example service: `services/vendorService.js`
+- Example controller: `controllers/vendorController.js`
+- Example route: `routes/vendor.js`
+- Supabase client: `config/supabaseClient.js`
+- Supabase migrations: `backend/supabase/migrations`
+- HTTP test file: `backend/api/http_test/test.http`

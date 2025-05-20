@@ -591,6 +591,16 @@ SELECT pg_catalog.setval('"supabase_functions"."hooks_id_seq"', 1, false);
 
 
 --
+-- Data for Name: pricing_tiers; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+insert into public.pricing_tiers (name, discount_pct) values
+  ('TIER_1', 0.00),
+  ('TIER_2', 0.10),
+  ('TIER_3', 0.15);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
