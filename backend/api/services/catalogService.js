@@ -1,15 +1,30 @@
 const supabase = require('../config/supabaseClient');
+const { applySearchAndPagination } = require('./utils');
 
 /**
- * Fetch product catalog with vendor-specific pricing.
+ * Fetch product catalog with vendor-specific pricing, search, and pagination.
  * @param {string} pricingTier - The vendor's pricing tier (e.g., TIER_1, TIER_2).
+ * @param {object} options
+ * @param {string} [options.search] - Search term
+ * @param {number} [options.page=1] - Page number (1-based)
+ * @param {number} [options.pageSize=20] - Items per page
  * @returns {Promise<Array>} - List of products with vendor-specific pricing.
  */
-async function getCatalog(pricingTier) {
-  // Fetch all products
-  const { data: products, error: prodError } = await supabase
+async function getCatalog(pricingTier, { search, page = 1, pageSize = 20 } = {}) {
+  // Build base query
+  let query = supabase
     .from('products')
     .select('sku, name, category, unit_type, image_url, price_per_kg, gst_percent');
+
+  // Apply search and pagination
+  query = applySearchAndPagination(query, {
+    search,
+    searchFields: ['name', 'category', 'sku'],
+    page,
+    pageSize
+  });
+
+  const { data: products, error: prodError } = await query;
   if (prodError) throw prodError;
 
   // Fetch discount for the pricing tier
