@@ -16,25 +16,27 @@ This document outlines the proposed database schema based on the API contract an
 ---
 
 ## Table: products
-| Field           | Type      | Constraints         | Notes                       |
-|-----------------|-----------|--------------------|-----------------------------|
-| sku             | text      | PK, not null       | Product SKU                 |
-| name            | text      | not null           |                             |
-| box_weight_grams| integer   | not null           |                             |
-| image_url       | text      |                    |                             |
-| price_per_kg    | numeric   | not null           | Vendor-specific via pricing |
-| created_at      | timestamptz | default now()    |                             |
+| Field           | Type        | Constraints         | Notes                                   |
+|-----------------|------------|--------------------|-----------------------------------------|
+| sku             | text       | PK, not null       | Unique product code                     |
+| name            | text       | not null           | Product name                            |
+| category        | text       | not null           | e.g., GAJAK, PATTIS, ROLL               |
+| box_weight_grams| integer    | not null           | Fixed weight of 1 unit                  |
+| unit_type       | text       | not null           | e.g., PER KG, PER BOX                   |
+| image_url       | text       |                    | Optional                                |
+| price_per_kg    | numeric    | not null           | Core pricing metric                     |
+| gst_percent     | numeric    |                    | GST % as decimal (0.05 for 5%)          |
+| created_at      | timestamptz| default now()      | Timestamp                               |
 
 ---
 
-## Table: vendor_product_pricing
-| Field         | Type      | Constraints         | Notes                       |
-|--------------|-----------|--------------------|-----------------------------|
-| id           | uuid      | PK, not null       |                             |
-| vendor_id    | uuid      | FK -> vendors.id   |                             |
-| sku          | text      | FK -> products.sku |                             |
-| price_per_kg | numeric   | not null           |                             |
-| created_at   | timestamptz | default now()    |                             |
+pricing_tiers
+
+| name    | discount_pct |
+|---------|--------------|
+| TIER_1  | 0.00         |
+| TIER_2  | 0.10         |
+| TIER_3  | 0.15         |
 
 ---
 
