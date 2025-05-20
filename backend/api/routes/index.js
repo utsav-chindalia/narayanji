@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware');
+
+// Apply authentication middleware to all /api routes
+router.use(authMiddleware);
 
 // Example: router.use('/users', require('../controllers/userController'));
 

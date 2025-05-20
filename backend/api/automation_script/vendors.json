@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Vendor One",
+    "phone": "+911234567890",
+    "pricing_tier": "TIER_1"
+  },
+  {
+    "name": "Vendor Two",
+    "phone": "+919876543210",
+    "pricing_tier": "TIER_2"
+  },
+  {
+    "name": "HONEY MONEY TOP",
+    "phone": "8105885551",
+    "pricing_tier": "TIER_2"
+  }
+] 
