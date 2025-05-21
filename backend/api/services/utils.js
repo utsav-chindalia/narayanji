@@ -1,3 +1,5 @@
+const supabase = require('../config/supabaseClient');
+
 /**
  * Applies search and pagination to a Supabase query builder.
  * @param {object} query - Supabase query builder
@@ -24,4 +26,19 @@ function applySearchAndPagination(query, { search, searchFields = [], page = 1, 
   return query;
 }
 
-module.exports = { applySearchAndPagination }; 
+/**
+ * Gets vendor_id and role based on uuid.
+ * @param {string} uuid - The uuid to search for (vendor's user id)
+ * @returns {Promise<{id: string, role: string|null}|null>} - The vendor id and role if found, or null if not found
+ */
+async function getVendorIdByUuid(uuid) {
+  const { data, error } = await supabase
+    .from('vendors')
+    .select('id, role')
+    .eq('id', uuid)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? { id: data.id, role: data.role } : null;
+}
+
+module.exports = { applySearchAndPagination, getVendorIdByUuid }; 

@@ -25,7 +25,17 @@ SET row_security = off;
 INSERT INTO "auth"."audit_log_entries" ("instance_id", "id", "payload", "created_at", "ip_address") VALUES
 	('00000000-0000-0000-0000-000000000000', '4da000e0-110e-4fe2-b74c-01456d576473', '{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"+911234567890@gajak.com","user_id":"aad89d8d-01a7-4d4c-8b8e-0306e64503a1","user_phone":"911234567890"}}', '2025-05-20 13:24:42.683565+00', ''),
 	('00000000-0000-0000-0000-000000000000', '9d2730c1-a903-460d-86c8-08c3ac1712bb', '{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"+919876543210@gajak.com","user_id":"73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53","user_phone":"919876543210"}}', '2025-05-20 13:24:42.773423+00', ''),
-	('00000000-0000-0000-0000-000000000000', 'a3bd6411-dc78-4c10-b626-143375921386', '{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"8105885551@gajak.com","user_id":"cc173c68-2471-4096-b9c0-fa1fd3823d2f","user_phone":"8105885551"}}', '2025-05-20 13:24:42.833408+00', '');
+	('00000000-0000-0000-0000-000000000000', 'a3bd6411-dc78-4c10-b626-143375921386', '{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"8105885551@gajak.com","user_id":"cc173c68-2471-4096-b9c0-fa1fd3823d2f","user_phone":"8105885551"}}', '2025-05-20 13:24:42.833408+00', ''),
+	('00000000-0000-0000-0000-000000000000', '1d5aefc4-a0e7-4869-943c-8d196f7ecf26', '{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"+919876543210@gajak.com","user_id":"73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53","user_phone":"919876543210"}}', '2025-05-21 07:03:54.941148+00', ''),
+	('00000000-0000-0000-0000-000000000000', '5deec913-1820-422e-82c8-44fb11dc9c46', '{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"+911234567890@gajak.com","user_id":"aad89d8d-01a7-4d4c-8b8e-0306e64503a1","user_phone":"911234567890"}}', '2025-05-21 07:03:54.941204+00', ''),
+	('00000000-0000-0000-0000-000000000000', '76548aa7-920e-4dca-85a5-c164fff9ace2', '{"action":"user_deleted","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"8105885551@gajak.com","user_id":"cc173c68-2471-4096-b9c0-fa1fd3823d2f","user_phone":"8105885551"}}', '2025-05-21 07:03:54.941125+00', ''),
+	('00000000-0000-0000-0000-000000000000', '9f0b044c-cb83-4d61-b3f2-6e38cead29eb', '{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"+911234567890@gajak.com","user_id":"01308449-3ee2-4d2e-9262-754f1c92c58e","user_phone":"911234567890"}}', '2025-05-21 07:04:13.869768+00', ''),
+	('00000000-0000-0000-0000-000000000000', '82b8f02c-5514-4aa1-af55-6e6be434755c', '{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"+919876543210@gajak.com","user_id":"a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc","user_phone":"919876543210"}}', '2025-05-21 07:04:13.95791+00', ''),
+	('00000000-0000-0000-0000-000000000000', 'c55e1cf6-a255-4176-ae1f-4746946b01be', '{"action":"user_signedup","actor_id":"00000000-0000-0000-0000-000000000000","actor_username":"service_role","actor_via_sso":false,"log_type":"team","traits":{"user_email":"8105885551@gajak.com","user_id":"9f8c7a8c-6fd5-45ad-a3c1-7367d8171152","user_phone":"8105885551"}}', '2025-05-21 07:04:14.018567+00', ''),
+	('00000000-0000-0000-0000-000000000000', 'f1d33dd7-5ceb-48da-a640-71013abd399e', '{"action":"user_signedup","actor_id":"9f8c7a8c-6fd5-45ad-a3c1-7367d8171152","actor_username":"8105885551","actor_via_sso":false,"log_type":"team","traits":{"channel":"sms","provider":"phone"}}', '2025-05-21 07:10:30.360051+00', ''),
+	('00000000-0000-0000-0000-000000000000', '3b2ada28-b20c-40bf-92c3-ae2e839cebce', '{"action":"login","actor_id":"9f8c7a8c-6fd5-45ad-a3c1-7367d8171152","actor_username":"8105885551","actor_via_sso":false,"log_type":"account","traits":{"provider":"phone"}}', '2025-05-21 07:10:30.364065+00', ''),
+	('00000000-0000-0000-0000-000000000000', '5d8e4292-64af-40e4-96b9-e8edbdb366ed', '{"action":"user_recovery_requested","actor_id":"9f8c7a8c-6fd5-45ad-a3c1-7367d8171152","actor_username":"8105885551","actor_via_sso":false,"log_type":"user","traits":{"channel":"sms"}}', '2025-05-21 07:10:30.37183+00', ''),
+	('00000000-0000-0000-0000-000000000000', 'e56427d4-8067-44f7-868d-895f9a5e1c2b', '{"action":"user_signedup","actor_id":"9f8c7a8c-6fd5-45ad-a3c1-7367d8171152","actor_username":"8105885551","actor_via_sso":false,"log_type":"team"}', '2025-05-21 07:10:30.392128+00', '');
 
 
 --
@@ -39,9 +49,9 @@ INSERT INTO "auth"."audit_log_entries" ("instance_id", "id", "payload", "created
 --
 
 INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encrypted_password", "email_confirmed_at", "invited_at", "confirmation_token", "confirmation_sent_at", "recovery_token", "recovery_sent_at", "email_change_token_new", "email_change", "email_change_sent_at", "last_sign_in_at", "raw_app_meta_data", "raw_user_meta_data", "is_super_admin", "created_at", "updated_at", "phone", "phone_confirmed_at", "phone_change", "phone_change_token", "phone_change_sent_at", "email_change_token_current", "email_change_confirm_status", "banned_until", "reauthentication_token", "reauthentication_sent_at", "is_sso_user", "deleted_at", "is_anonymous") VALUES
-	('00000000-0000-0000-0000-000000000000', 'aad89d8d-01a7-4d4c-8b8e-0306e64503a1', 'authenticated', 'authenticated', '+911234567890@gajak.com', '$2a$10$sZgoVL8f7iRccRb6FQs0Gu96P7Ll9s5GacvCXf0/n.usjmDFVsiyS', '2025-05-20 13:24:42.684336+00', NULL, '', NULL, '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email", "phone"]}', '{"email_verified": true}', NULL, '2025-05-20 13:24:42.680697+00', '2025-05-20 13:24:42.684655+00', '911234567890', NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
-	('00000000-0000-0000-0000-000000000000', '73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53', 'authenticated', 'authenticated', '+919876543210@gajak.com', '$2a$10$GRq39Q9vc04GjEES5utIVu4CeQTFHHweJeSKJCEl3eCR64tE5nwHG', '2025-05-20 13:24:42.773754+00', NULL, '', NULL, '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email", "phone"]}', '{"email_verified": true}', NULL, '2025-05-20 13:24:42.772227+00', '2025-05-20 13:24:42.773983+00', '919876543210', NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
-	('00000000-0000-0000-0000-000000000000', 'cc173c68-2471-4096-b9c0-fa1fd3823d2f', 'authenticated', 'authenticated', '8105885551@gajak.com', '$2a$10$3aX2.E.cwEPnf1.8RY3Kmuhcf2MqRb7yRGxoAznlhFD2C/jurRMhS', '2025-05-20 13:24:42.83374+00', NULL, '', NULL, '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email", "phone"]}', '{"email_verified": true}', NULL, '2025-05-20 13:24:42.832441+00', '2025-05-20 13:24:42.833957+00', '8105885551', NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false);
+	('00000000-0000-0000-0000-000000000000', '01308449-3ee2-4d2e-9262-754f1c92c58e', 'authenticated', 'authenticated', '+911234567890@gajak.com', '$2a$10$AlpRWWOzf9g1eGFyAdatgufwJcyiQZ95Bl5P9nfw6mE4DYVReqb66', '2025-05-21 07:04:13.870252+00', NULL, '', NULL, '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email", "phone"]}', '{"email_verified": true}', NULL, '2025-05-21 07:04:13.866142+00', '2025-05-21 07:04:13.870543+00', '911234567890', NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
+	('00000000-0000-0000-0000-000000000000', 'a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc', 'authenticated', 'authenticated', '+919876543210@gajak.com', '$2a$10$hRobFeQfPACNNC5g1TVzee8rBLwyaEJuLwXSbmedL2uCKpjLUiCl6', '2025-05-21 07:04:13.958249+00', NULL, '', NULL, '', NULL, '', '', NULL, NULL, '{"provider": "email", "providers": ["email", "phone"]}', '{"email_verified": true}', NULL, '2025-05-21 07:04:13.956911+00', '2025-05-21 07:04:13.958498+00', '919876543210', NULL, '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false),
+	('00000000-0000-0000-0000-000000000000', '9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', 'authenticated', 'authenticated', '8105885551@gajak.com', '$2a$10$wRBZgzw7VuFO7WlyeZsxaefYwzbwQaqEepH06JRSMCkcATC1zHDpC', '2025-05-21 07:04:14.018888+00', NULL, '', '2025-05-21 07:10:30.37243+00', '', NULL, '', '', NULL, '2025-05-21 07:10:30.393638+00', '{"provider": "email", "providers": ["email", "phone"]}', '{"email_verified": true}', NULL, '2025-05-21 07:04:14.017508+00', '2025-05-21 07:10:30.39434+00', '8105885551', '2025-05-21 07:10:30.392411+00', '', '', NULL, '', 0, NULL, '', NULL, false, NULL, false);
 
 
 --
@@ -49,12 +59,12 @@ INSERT INTO "auth"."users" ("instance_id", "id", "aud", "role", "email", "encryp
 --
 
 INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "provider", "last_sign_in_at", "created_at", "updated_at", "id") VALUES
-	('aad89d8d-01a7-4d4c-8b8e-0306e64503a1', 'aad89d8d-01a7-4d4c-8b8e-0306e64503a1', '{"sub": "aad89d8d-01a7-4d4c-8b8e-0306e64503a1", "email": "+911234567890@gajak.com", "email_verified": false, "phone_verified": false}', 'email', '2025-05-20 13:24:42.682602+00', '2025-05-20 13:24:42.682621+00', '2025-05-20 13:24:42.682621+00', '3dcce19e-e652-434f-9504-3466a7e20e70'),
-	('aad89d8d-01a7-4d4c-8b8e-0306e64503a1', 'aad89d8d-01a7-4d4c-8b8e-0306e64503a1', '{"sub": "aad89d8d-01a7-4d4c-8b8e-0306e64503a1", "phone": "911234567890", "email_verified": false, "phone_verified": false}', 'phone', '2025-05-20 13:24:42.683255+00', '2025-05-20 13:24:42.683276+00', '2025-05-20 13:24:42.683276+00', 'c12fa2ae-d206-4610-81e9-7e0d888ecebe'),
-	('73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53', '73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53', '{"sub": "73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53", "email": "+919876543210@gajak.com", "email_verified": false, "phone_verified": false}', 'email', '2025-05-20 13:24:42.772768+00', '2025-05-20 13:24:42.77279+00', '2025-05-20 13:24:42.77279+00', 'b30c35f8-552f-444f-8f10-c78f5e975160'),
-	('73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53', '73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53', '{"sub": "73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53", "phone": "919876543210", "email_verified": false, "phone_verified": false}', 'phone', '2025-05-20 13:24:42.77319+00', '2025-05-20 13:24:42.773211+00', '2025-05-20 13:24:42.773211+00', '46726438-b9e0-4c13-961c-f842fae185b8'),
-	('cc173c68-2471-4096-b9c0-fa1fd3823d2f', 'cc173c68-2471-4096-b9c0-fa1fd3823d2f', '{"sub": "cc173c68-2471-4096-b9c0-fa1fd3823d2f", "email": "8105885551@gajak.com", "email_verified": false, "phone_verified": false}', 'email', '2025-05-20 13:24:42.832874+00', '2025-05-20 13:24:42.832893+00', '2025-05-20 13:24:42.832893+00', '91c2a7a9-63b0-4a2e-9e02-2c379c02dce7'),
-	('cc173c68-2471-4096-b9c0-fa1fd3823d2f', 'cc173c68-2471-4096-b9c0-fa1fd3823d2f', '{"sub": "cc173c68-2471-4096-b9c0-fa1fd3823d2f", "phone": "8105885551", "email_verified": false, "phone_verified": false}', 'phone', '2025-05-20 13:24:42.833163+00', '2025-05-20 13:24:42.833181+00', '2025-05-20 13:24:42.833181+00', 'ea3cfc83-7fe2-4aa4-8826-86ffca5e319d');
+	('01308449-3ee2-4d2e-9262-754f1c92c58e', '01308449-3ee2-4d2e-9262-754f1c92c58e', '{"sub": "01308449-3ee2-4d2e-9262-754f1c92c58e", "email": "+911234567890@gajak.com", "email_verified": false, "phone_verified": false}', 'email', '2025-05-21 07:04:13.869044+00', '2025-05-21 07:04:13.869066+00', '2025-05-21 07:04:13.869066+00', 'fb097630-e9d8-4c09-a3ac-ee729b4ed12c'),
+	('01308449-3ee2-4d2e-9262-754f1c92c58e', '01308449-3ee2-4d2e-9262-754f1c92c58e', '{"sub": "01308449-3ee2-4d2e-9262-754f1c92c58e", "phone": "911234567890", "email_verified": false, "phone_verified": false}', 'phone', '2025-05-21 07:04:13.869506+00', '2025-05-21 07:04:13.869523+00', '2025-05-21 07:04:13.869523+00', 'f97aaf01-2bdf-4a45-8ab2-cac85a21f270'),
+	('a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc', 'a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc', '{"sub": "a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc", "email": "+919876543210@gajak.com", "email_verified": false, "phone_verified": false}', 'email', '2025-05-21 07:04:13.957412+00', '2025-05-21 07:04:13.957427+00', '2025-05-21 07:04:13.957427+00', '8d4ab04c-6270-4690-8da7-21b5c71c6068'),
+	('a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc', 'a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc', '{"sub": "a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc", "phone": "919876543210", "email_verified": false, "phone_verified": false}', 'phone', '2025-05-21 07:04:13.957692+00', '2025-05-21 07:04:13.957706+00', '2025-05-21 07:04:13.957706+00', '07b3abb9-dfb7-44bd-9282-396f093e918d'),
+	('9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', '9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', '{"sub": "9f8c7a8c-6fd5-45ad-a3c1-7367d8171152", "email": "8105885551@gajak.com", "email_verified": false, "phone_verified": false}', 'email', '2025-05-21 07:04:14.017987+00', '2025-05-21 07:04:14.018019+00', '2025-05-21 07:04:14.018019+00', '47d21a9b-6acb-4d88-8eff-6cd743ee08d1'),
+	('9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', '9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', '{"sub": "9f8c7a8c-6fd5-45ad-a3c1-7367d8171152", "phone": "8105885551", "email_verified": false, "phone_verified": false}', 'phone', '2025-05-21 07:04:14.018328+00', '2025-05-21 07:04:14.018347+00', '2025-05-21 07:04:14.018347+00', 'c285beb4-a457-4b7d-9348-0e818d04b31d');
 
 
 --
@@ -67,12 +77,18 @@ INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "pro
 -- Data for Name: sessions; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
+INSERT INTO "auth"."sessions" ("id", "user_id", "created_at", "updated_at", "factor_id", "aal", "not_after", "refreshed_at", "user_agent", "ip", "tag") VALUES
+	('ab6cf9e1-3fd4-4446-9e31-9c52cf7a44bd', '9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', '2025-05-21 07:10:30.364602+00', '2025-05-21 07:10:30.364602+00', NULL, 'aal1', NULL, NULL, 'node', '192.168.65.1', NULL),
+	('7ab10b26-8797-4323-9721-5b9f69107330', '9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', '2025-05-21 07:10:30.393662+00', '2025-05-21 07:10:30.393662+00', NULL, 'aal1', NULL, NULL, 'node', '192.168.65.1', NULL);
 
 
 --
 -- Data for Name: mfa_amr_claims; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
+INSERT INTO "auth"."mfa_amr_claims" ("session_id", "created_at", "updated_at", "authentication_method", "id") VALUES
+	('ab6cf9e1-3fd4-4446-9e31-9c52cf7a44bd', '2025-05-21 07:10:30.368238+00', '2025-05-21 07:10:30.368238+00', 'password', '743e0937-4d89-4154-ae8c-de800e91c588'),
+	('7ab10b26-8797-4323-9721-5b9f69107330', '2025-05-21 07:10:30.394459+00', '2025-05-21 07:10:30.394459+00', 'otp', 'c6dd634a-7af7-435f-940c-817a7e5873a2');
 
 
 --
@@ -97,6 +113,9 @@ INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "pro
 -- Data for Name: refresh_tokens; Type: TABLE DATA; Schema: auth; Owner: supabase_auth_admin
 --
 
+INSERT INTO "auth"."refresh_tokens" ("instance_id", "id", "token", "user_id", "revoked", "created_at", "updated_at", "parent", "session_id") VALUES
+	('00000000-0000-0000-0000-000000000000', 1, 'aAn9O13P4YRMaEyT7VOgmw', '9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', false, '2025-05-21 07:10:30.365842+00', '2025-05-21 07:10:30.365842+00', NULL, 'ab6cf9e1-3fd4-4446-9e31-9c52cf7a44bd'),
+	('00000000-0000-0000-0000-000000000000', 2, '-plTezVdq0bPXdR1g16tOg', '9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', false, '2025-05-21 07:10:30.393937+00', '2025-05-21 07:10:30.393937+00', NULL, '7ab10b26-8797-4323-9721-5b9f69107330');
 
 
 --
@@ -127,16 +146,18 @@ INSERT INTO "auth"."identities" ("provider_id", "user_id", "identity_data", "pro
 -- Data for Name: vendors; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO "public"."vendors" ("id", "name", "phone", "pricing_tier", "created_at") VALUES
-	('aad89d8d-01a7-4d4c-8b8e-0306e64503a1', 'Vendor One', '+911234567890', 'TIER_1', '2025-05-20 13:24:42.710259+00'),
-	('73e0fa9a-41e8-4d3e-8ec2-a37b696fdb53', 'Vendor Two', '+919876543210', 'TIER_2', '2025-05-20 13:24:42.777154+00'),
-	('cc173c68-2471-4096-b9c0-fa1fd3823d2f', 'HONEY MONEY TOP', '8105885551', 'TIER_2', '2025-05-20 13:24:42.837203+00');
+INSERT INTO "public"."vendors" ("id", "name", "phone", "pricing_tier", "created_at", "role") VALUES
+	('01308449-3ee2-4d2e-9262-754f1c92c58e', 'Vendor One', '+911234567890', 'TIER_1', '2025-05-21 07:04:13.897333+00', 'vendor'),
+	('a5dfc7b8-c305-40b0-8c82-52eb8bd5a6cc', 'Vendor Two', '+919876543210', 'TIER_2', '2025-05-21 07:04:13.962173+00', 'vendor'),
+	('9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', 'Naryanji', '8105885551', 'TIER_2', '2025-05-21 07:04:14.023336+00', 'admin');
 
 
 --
 -- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO "public"."orders" ("id", "vendor_id", "status", "total_weight", "created_at", "last_updated") VALUES
+	('ORD-1747811460295', '9f8c7a8c-6fd5-45ad-a3c1-7367d8171152', 'cart', NULL, '2025-05-21 07:11:00.295+00', NULL);
 
 
 --
@@ -514,6 +535,9 @@ INSERT INTO "public"."products" ("sku", "name", "image_url", "price_per_kg", "cr
 -- Data for Name: order_items; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO "public"."order_items" ("id", "order_id", "sku", "quantity_kg", "approved_quantity_kg") VALUES
+	('fac25bec-b634-44ae-af7d-ea5435ea939c', 'ORD-1747811460295', 'SKU1', 2, NULL),
+	('e822fbe4-9dea-4c6c-b0e1-1cf2dd2cec52', 'ORD-1747811460295', 'SKU2', 2, NULL);
 
 
 --
@@ -523,9 +547,13 @@ INSERT INTO "public"."products" ("sku", "name", "image_url", "price_per_kg", "cr
 
 
 --
--- Data for Name: vendor_product_pricing; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: pricing_tiers; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO "public"."pricing_tiers" ("name", "discount_pct") VALUES
+	('TIER_1', 0.00),
+	('TIER_2', 0.10),
+	('TIER_3', 0.15);
 
 
 --
@@ -580,7 +608,7 @@ INSERT INTO "public"."products" ("sku", "name", "image_url", "price_per_kg", "cr
 -- Name: refresh_tokens_id_seq; Type: SEQUENCE SET; Schema: auth; Owner: supabase_auth_admin
 --
 
-SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1, false);
+SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 2, true);
 
 
 --
@@ -588,16 +616,6 @@ SELECT pg_catalog.setval('"auth"."refresh_tokens_id_seq"', 1, false);
 --
 
 SELECT pg_catalog.setval('"supabase_functions"."hooks_id_seq"', 1, false);
-
-
---
--- Data for Name: pricing_tiers; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-insert into public.pricing_tiers (name, discount_pct) values
-  ('TIER_1', 0.00),
-  ('TIER_2', 0.10),
-  ('TIER_3', 0.15);
 
 
 --

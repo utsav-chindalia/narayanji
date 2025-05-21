@@ -19,6 +19,7 @@ module.exports = async function authMiddleware(req, res, next) {
       return res.status(401).json({ error: 'Invalid or expired token' });
     }
     req.user = data.user;
+    console.log(req.user);
     next();
   } catch (err) {
     return res.status(401).json({ error: 'Authentication failed' });

@@ -34,7 +34,8 @@ async function main() {
         id: userId,
         name: vendor.name,
         phone: vendor.phone,
-        pricing_tier: vendor.pricing_tier
+        pricing_tier: vendor.pricing_tier,
+        role: vendor.role || null // Add role if present, else null
       });
       if (insertError) throw insertError;
       console.log(`Inserted vendor: ${vendor.name}`);

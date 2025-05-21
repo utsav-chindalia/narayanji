@@ -16,7 +16,8 @@ exports.listOrders = async (req, res, next) => {
       status,
       search,
       page: Number(page) || 1,
-      pageSize: Number(pageSize) || 20
+      pageSize: Number(pageSize) || 20,
+      user: req.user
     });
     res.json(orders);
   } catch (error) {

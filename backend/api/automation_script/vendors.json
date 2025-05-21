@@ -2,16 +2,19 @@
   {
     "name": "Vendor One",
     "phone": "+911234567890",
-    "pricing_tier": "TIER_1"
+    "pricing_tier": "TIER_1",
+    "role": "vendor"
   },
   {
     "name": "Vendor Two",
     "phone": "+919876543210",
-    "pricing_tier": "TIER_2"
+    "pricing_tier": "TIER_2",
+    "role": "vendor"
   },
   {
-    "name": "HONEY MONEY TOP",
+    "name": "Naryanji",
     "phone": "8105885551",
-    "pricing_tier": "TIER_2"
+    "pricing_tier": "TIER_2",
+    "role": "admin"
   }
 ] 
