@@ -5,4 +5,7 @@ const ordersController = require('../controllers/ordersController');
 // GET /api/orders
 router.get('/', ordersController.listOrders);
 
+// GET /api/orders/:orderId/items
+router.get('/:orderId/items', ordersController.getOrderItems);
+
 module.exports = router; 

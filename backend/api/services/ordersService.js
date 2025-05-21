@@ -50,4 +50,39 @@ async function listOrders({ status, search, page = 1, pageSize = 20 } = {}) {
   return orders || [];
 }
 
-module.exports = { listOrders }; 
+/**
+ * Get all items for a given orderId, including product details and pricing tier discount.
+ * @param {string} orderId
+ * @param {string} pricingTier
+ * @returns {Promise<Array>} - List of order items with product info and pricing
+ */
+async function getOrderItems(orderId, pricingTier) {
+  // Fetch order items with product info
+  const { data: items, error: itemsError } = await supabase
+    .from('order_items')
+    .select('sku, quantity_kg, product:products(sku, name, category, price_per_kg, gst_percent)')
+    .eq('order_id', orderId);
+  if (itemsError) throw itemsError;
+  if (!items || items.length === 0) return [];
+
+  // Fetch discount for the pricing tier
+  const { data: tier, error: tierError } = await supabase
+    .from('pricing_tiers')
+    .select('discount_pct')
+    .eq('name', pricingTier)
+    .maybeSingle();
+  if (tierError) throw tierError;
+  const discount = tier ? parseFloat(tier.discount_pct) : 0;
+
+  return items.map(item => ({
+    sku: item.sku,
+    quantity_kg: item.quantity_kg,
+    product_name: item.product?.name || '',
+    pricing_tier: pricingTier,
+    price_per_kg: item.product ? Math.round((item.product.price_per_kg * (1 - discount)) * 100) / 100 : '',
+    gst: item.product?.gst_percent ?? '',
+    product_category: item.product?.category || ''
+  }));
+}
+
+module.exports = { listOrders, getOrderItems }; 

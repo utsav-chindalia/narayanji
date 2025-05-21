@@ -22,4 +22,19 @@ exports.listOrders = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+/**
+ * GET /api/orders/:orderId/items
+ * Returns all items for the given orderId with product and pricing info.
+ */
+exports.getOrderItems = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const pricingTier = req.user && req.user.pricingTier ? req.user.pricingTier : 'TIER_1';
+    const items = await ordersService.getOrderItems(orderId, pricingTier);
+    res.json(items);
+  } catch (error) {
+    next(error);
+  }
 }; 
