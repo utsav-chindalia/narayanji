@@ -29,5 +29,7 @@ Thumbs.db
 *.cache
 *.tmp
 
+razorpay/
+
 # Ignore backend/api/node_modules from root as well
 backend/api/node_modules/ 

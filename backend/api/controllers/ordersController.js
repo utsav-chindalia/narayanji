@@ -38,4 +38,19 @@ exports.getOrderItems = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+/**
+ * POST /api/orders/:orderId/confirm
+ * Triggers payment link generation (stub for now)
+ */
+exports.confirmOrderPayment = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    // Call the service (stub for now)
+    const result = await ordersService.confirmOrderPayment(orderId, req.user);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 }; 

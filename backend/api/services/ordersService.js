@@ -107,4 +107,18 @@ async function getOrderItems(orderId, pricingTier) {
   }));
 }
 
-module.exports = { listOrders, getOrderItems }; 
+/**
+ * Confirm order payment (stub for now, returns placeholder paymentUrl)
+ * @param {string} orderId
+ * @param {object} user
+ * @returns {Promise<object>} - Payment link response
+ */
+async function confirmOrderPayment(orderId, user) {
+  // TODO: Add validation, order checks, and Razorpay integration
+  return {
+    success: true,
+    paymentUrl: 'https://razorpay.com/pay/order_stub123'
+  };
+}
+
+module.exports = { listOrders, getOrderItems, confirmOrderPayment }; 

@@ -1,0 +1,78 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Razorpay Integration Rules
+
+## 1. General Principles
+
+- Always use the official Razorpay Node.js SDK for all payment, order, customer, refund, transfer, and webhook operations.
+- Never hardcode API keys. Always use environment variables for `key_id` and `key_secret`.
+- Follow the structure and naming conventions as shown in the official Razorpay documentation and the provided `example.js`.
+- All API calls must be wrapped in promise chains (`then/catch`) or `async/await` with proper error handling.
+- Do not log sensitive information (API keys, secrets, customer data) in production logs.
+
+## 2. Payments
+
+- Use `rzp.payments.all`, `rzp.payments.fetch`, `rzp.payments.capture`, and `rzp.payments.refund` for payment operations.
+- Always validate payment status before proceeding with order fulfillment.
+- For refunds, support both full and partial refunds. Use the `notes` field for refund context.
+- Use the `expand[]` parameter when additional payment details are required.
+
+## 3. Customers
+
+- Use `rzp.customers.create`, `rzp.customers.edit`, and `rzp.customers.fetch` for customer management.
+- Always check for existing customers before creating new ones if possible (`fail_existing`).
+- Store and use customer IDs for all future payment and order associations.
+
+## 4. Orders
+
+- Use `rzp.orders.create`, `rzp.orders.all`, and `rzp.orders.fetch` for order management.
+- Always associate payments with orders using the `order_id` field.
+- Use the `receipt` field for your internal order reference.
+
+## 5. Transfers
+
+- Use `rzp.payments.transfer` for payment-based transfers and `rzp.transfers.create` for direct transfers.
+- Always specify `account`, `amount`, and `currency`.
+- Use the `notes` field for transfer context and auditability.
+
+## 6. Refunds
+
+- Use `rzp.payments.refund` for creating refunds and `rzp.payments.fetchRefund` for fetching specific refunds.
+- Support both normal and instant refunds (`speed` parameter).
+- Always log refund status and update order/payment records accordingly.
+
+## 7. Webhooks
+
+- Register webhooks using `instance.webhooks.create`.
+- Always use a secure, secret-protected endpoint for receiving webhooks.
+- Validate webhook signatures using the Razorpay secret.
+- Handle all relevant events: `payment.authorized`, `payment.captured`, `payment.failed`, `refund.created`, etc.
+- Log webhook payloads for debugging, but redact sensitive data in production.
+
+## 8. Error Handling
+
+- Always handle `.catch` or use `try/catch` for all SDK calls.
+- Log errors with enough context to debug, but never expose secrets or PII.
+- For user-facing errors, provide clear, actionable messages.
+
+## 9. Documentation & Testing
+
+- Reference the corresponding Markdown file in `/backend/api/razorpay/documents/` for each Razorpay feature you implement.
+- Add code comments referencing the document section (e.g., `// See documents/payment.md: "Capture payment"`).
+- Write tests for all payment, order, refund, and webhook flows, including error and edge cases.
+
+## 10. Security
+
+- Never expose API keys or secrets in client-side code.
+- Use HTTPS for all webhook endpoints.
+- Rotate API keys periodically and update environment variables accordingly.
+
+---
+
+**How to use this file:**  
+- Place this file at `.cursor/rules/razorpay-rules.mdc`.
+- Reference this ruleset in PRs and code reviews for any Razorpay-related changes.
+- Update this file if Razorpay's API or your integration patterns change.
