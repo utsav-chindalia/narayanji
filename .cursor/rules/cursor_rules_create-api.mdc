@@ -1,4 +1,8 @@
-# Rule: create-api
+---
+description: 
+globs: 
+alwaysApply: false
+---
 
 ## Purpose
 Standardize the process for creating new API endpoints in the Narayan Ji Gajak DMS backend, ensuring consistency, security, and maintainability. Reference `backend/supabase/database_schema.md` for all database structure and field details.

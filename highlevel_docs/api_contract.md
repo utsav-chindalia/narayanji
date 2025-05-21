@@ -70,6 +70,46 @@ Response:
 }
 
 
+
+
+
+
+PATCH http://localhost:3000/api/cart/ORD-1747765403319
+Update cart (replace items in an existing order)
+{
+  "items": [
+    { "sku": "SKU1", "quantity_kg": 3 }
+  ]
+}
+
+
+
+GET /orders
+List all the orders details, option to filter based on status, search and pagination.
+
+Response:
+[
+  {
+    "id": "ORD-XXXX",
+    "vendorId": "XXXXXXXXX",
+    "status": "approved"
+  }
+]
+
+GET /orders/:orderId/items
+List all the items for the given orderId
+[
+  {
+    "sku": "SKU",
+    "quantity_kg": 3,
+    "product_name": "",
+    "pricing_tier": "",
+    "price_per_kg": "", 
+    "gst": "",
+    "product_category": ""
+  }
+]
+
 PUT /orders/:orderId/review
 Admin updates approved quantities after reviewing order
 Request:

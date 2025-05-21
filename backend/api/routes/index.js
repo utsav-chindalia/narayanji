@@ -11,5 +11,7 @@ router.use('/example', require('./example'));
 // Route for checking if a vendor phone is allowed
 router.use('/check-vendor', require('./vendor'));
 router.use('/catalog', require('./catalog'));
+router.use('/cart', require('./cart'));
+router.use('/orders', require('./orders'));
 
 module.exports = router; 
