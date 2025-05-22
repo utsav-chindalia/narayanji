@@ -1,6 +1,5 @@
 const supabase = require('../config/supabaseClient');
 const { applySearchAndPagination, getVendorIdByUuid } = require('./utils');
-const Razorpay = require('razorpay');
 const config = require('../config');
 
 function isUUID(str) {
@@ -8,10 +7,7 @@ function isUUID(str) {
 }
 
 // Razorpay instance (see documents/payment.md: "Create order")
-const rzp = new Razorpay({
-  key_id: config.razorpay.key_id,
-  key_secret: config.razorpay.key_secret
-});
+const { rzp } = config;
 
 /**
  * List orders with optional status filter, search, and pagination, and role-based filtering.
@@ -126,6 +122,12 @@ async function confirmOrderPayment(orderId, user) {
   if (!user || !user.id) {
     throw { status: 401, message: 'Unauthorized: Missing user id' };
   }
+  // Fetch user role
+  const vendor = await getVendorIdByUuid(user.id);
+  const role = vendor ? vendor.role : null;
+  if (role !== 'admin') {
+    throw { status: 403, message: 'Forbidden: Only admin can perform this action' };
+  }
   // Fetch order
   const { data: order, error: orderError } = await supabase
     .from('orders')
@@ -134,9 +136,6 @@ async function confirmOrderPayment(orderId, user) {
     .maybeSingle();
   if (orderError) throw orderError;
   if (!order) throw { status: 404, message: 'Order not found' };
-  if (order.vendor_id !== user.id) {
-    throw { status: 403, message: 'Forbidden: Vendor mismatch' };
-  }
   if (order.status !== 'cart' && order.status !== 'pending') {
     throw { status: 400, message: 'Order is not payable' };
   }
