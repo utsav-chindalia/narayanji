@@ -1,9 +1,17 @@
 const supabase = require('../config/supabaseClient');
 const { applySearchAndPagination, getVendorIdByUuid } = require('./utils');
+const Razorpay = require('razorpay');
+const config = require('../config');
 
 function isUUID(str) {
   return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(str);
 }
+
+// Razorpay instance (see documents/payment.md: "Create order")
+const rzp = new Razorpay({
+  key_id: config.razorpay.key_id,
+  key_secret: config.razorpay.key_secret
+});
 
 /**
  * List orders with optional status filter, search, and pagination, and role-based filtering.
@@ -108,17 +116,75 @@ async function getOrderItems(orderId, pricingTier) {
 }
 
 /**
- * Confirm order payment (stub for now, returns placeholder paymentUrl)
+ * Confirm order payment: creates a Razorpay order for the full amount of the vendor's cart
  * @param {string} orderId
  * @param {object} user
- * @returns {Promise<object>} - Payment link response
+ * @returns {Promise<object>} - Payment link/order response
  */
 async function confirmOrderPayment(orderId, user) {
-  // TODO: Add validation, order checks, and Razorpay integration
-  return {
-    success: true,
-    paymentUrl: 'https://razorpay.com/pay/order_stub123'
-  };
+  // 1. Validate user and order
+  if (!user || !user.id) {
+    throw { status: 401, message: 'Unauthorized: Missing user id' };
+  }
+  // Fetch order
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .maybeSingle();
+  if (orderError) throw orderError;
+  if (!order) throw { status: 404, message: 'Order not found' };
+  if (order.vendor_id !== user.id) {
+    throw { status: 403, message: 'Forbidden: Vendor mismatch' };
+  }
+  if (order.status !== 'cart' && order.status !== 'pending') {
+    throw { status: 400, message: 'Order is not payable' };
+  }
+
+  // 2. Fetch order items and vendor pricing tier
+  // (Assume pricing tier is stored on vendor or order)
+  let pricingTier = order.pricing_tier || 'TIER_1';
+  const items = await getOrderItems(orderId, pricingTier);
+  if (!items.length) throw { status: 400, message: 'Order has no items' };
+
+  // 3. Calculate total amount (sum of price_per_kg * quantity_kg for all items)
+  let total = 0;
+  for (const item of items) {
+    total += (parseFloat(item.price_per_kg) || 0) * (parseFloat(item.quantity_kg) || 0);
+  }
+  // Razorpay expects amount in paise (INR * 100)
+  const amountPaise = Math.round(total * 100);
+  if (amountPaise <= 0) throw { status: 400, message: 'Order total is zero' };
+
+  // 4. Create Razorpay order
+  try {
+    const razorpayOrder = await rzp.orders.create({
+      amount: amountPaise,
+      currency: 'INR',
+      receipt: orderId,
+      payment_capture: 1, // auto-capture
+      notes: {
+        vendor_id: order.vendor_id,
+        order_id: orderId
+      }
+    });
+    // Optionally, update order with razorpay_order_id
+    // await supabase.from('orders').update({ razorpay_order_id: razorpayOrder.id }).eq('id', orderId);
+    // Return order info for frontend to proceed with payment
+    return {
+      success: true,
+      razorpayOrderId: razorpayOrder.id,
+      amount: razorpayOrder.amount,
+      currency: razorpayOrder.currency,
+      orderId,
+      paymentUrl: null // Frontend should use Razorpay Checkout with this order id
+    };
+  } catch (err) {
+    // See razorpay-rules.mdc: Error Handling
+    // Log error context, but not secrets or PII
+    console.error('Razorpay order creation failed', { orderId, vendorId: order.vendor_id, err: err.message });
+    throw { status: 500, message: 'Failed to create payment order. Please try again.' };
+  }
 }
 
 module.exports = { listOrders, getOrderItems, confirmOrderPayment }; 
