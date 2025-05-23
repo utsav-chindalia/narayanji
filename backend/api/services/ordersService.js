@@ -1,5 +1,5 @@
 const supabase = require('../config/supabaseClient');
-const { applySearchAndPagination, getVendorIdByUuid } = require('./utils');
+const { applySearchAndPagination, getVendorIdByUuid, getVendorDetailsById } = require('./utils');
 const config = require('../config');
 
 function isUUID(str) {
@@ -112,7 +112,7 @@ async function getOrderItems(orderId, pricingTier) {
 }
 
 /**
- * Confirm order payment: creates a Razorpay order for the full amount of the vendor's cart
+ * Confirm order payment: creates a Razorpay payment link for the full amount of the vendor's cart
  * @param {string} orderId
  * @param {object} user
  * @returns {Promise<object>} - Payment link/order response
@@ -141,7 +141,6 @@ async function confirmOrderPayment(orderId, user) {
   }
 
   // 2. Fetch order items and vendor pricing tier
-  // (Assume pricing tier is stored on vendor or order)
   let pricingTier = order.pricing_tier || 'TIER_1';
   const items = await getOrderItems(orderId, pricingTier);
   if (!items.length) throw { status: 400, message: 'Order has no items' };
@@ -151,13 +150,17 @@ async function confirmOrderPayment(orderId, user) {
   for (const item of items) {
     total += (parseFloat(item.price_per_kg) || 0) * (parseFloat(item.quantity_kg) || 0);
   }
-  // Razorpay expects amount in paise (INR * 100)
   const amountPaise = Math.round(total * 100);
   if (amountPaise <= 0) throw { status: 400, message: 'Order total is zero' };
 
-  // 4. Create Razorpay order
+  // 4. Fetch vendor details for payment link
+  const vendorDetails = await getVendorDetailsById(order.vendor_id);
+  if (!vendorDetails) throw { status: 404, message: 'Vendor not found' };
+
+  // 5. Create Razorpay order
+  let razorpayOrder;
   try {
-    const razorpayOrder = await rzp.orders.create({
+    razorpayOrder = await rzp.orders.create({
       amount: amountPaise,
       currency: 'INR',
       receipt: orderId,
@@ -167,23 +170,77 @@ async function confirmOrderPayment(orderId, user) {
         order_id: orderId
       }
     });
-    // Optionally, update order with razorpay_order_id
-    // await supabase.from('orders').update({ razorpay_order_id: razorpayOrder.id }).eq('id', orderId);
-    // Return order info for frontend to proceed with payment
-    return {
-      success: true,
-      razorpayOrderId: razorpayOrder.id,
-      amount: razorpayOrder.amount,
-      currency: razorpayOrder.currency,
-      orderId,
-      paymentUrl: null // Frontend should use Razorpay Checkout with this order id
-    };
   } catch (err) {
-    // See razorpay-rules.mdc: Error Handling
-    // Log error context, but not secrets or PII
+    console.log(err);
     console.error('Razorpay order creation failed', { orderId, vendorId: order.vendor_id, err: err.message });
     throw { status: 500, message: 'Failed to create payment order. Please try again.' };
   }
+
+  // 6. Create Razorpay payment link
+  let paymentLink;
+  try {
+    paymentLink = await rzp.paymentLink.create({
+      amount: amountPaise,
+      currency: 'INR',
+      accept_partial: false,
+      reference_id: razorpayOrder.id,
+      description: `Payment for order ${orderId}`,
+      customer: {
+        name: vendorDetails.name,
+        contact: vendorDetails.phone,
+        // email: vendorDetails.email, // Uncomment if email is available
+      },
+      notes: {
+        vendor_id: order.vendor_id,
+        order_id: orderId,
+        razorpay_order_id: razorpayOrder.id
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    console.error('Razorpay payment link creation failed', { orderId, vendorId: order.vendor_id, err: err.message });
+    throw { status: 500, message: 'Failed to create payment link. Please try again.' };
+  }
+
+  // 7. Store payment details in payments table
+  let paymentRecord;
+  try {
+    const { data: inserted, error: insertError } = await supabase
+      .from('payments')
+      .insert({
+        id: paymentLink.id,
+        order_id: orderId,
+        app_pay_order_id: razorpayOrder.id,
+        status: 'pending',
+        payment_url: paymentLink.short_url
+      })
+      .select()
+      .maybeSingle();
+    if (insertError) throw insertError;
+    paymentRecord = inserted;
+  } catch (err) {
+    console.error('Failed to insert payment record', { orderId, err: err.message });
+    throw { status: 500, message: 'Failed to store payment record. Please try again.' };
+  }
+
+  // 8. Return all details
+  return {
+    success: true,
+    razorpayOrder: {
+      id: razorpayOrder.id,
+      amount: razorpayOrder.amount,
+      currency: razorpayOrder.currency,
+      receipt: razorpayOrder.receipt
+    },
+    paymentLink: {
+      id: paymentLink.id,
+      amount: paymentLink.amount,
+      currency: paymentLink.currency,
+      short_url: paymentLink.short_url
+    },
+    paymentRecord,
+    orderId
+  };
 }
 
 module.exports = { listOrders, getOrderItems, confirmOrderPayment }; 

@@ -41,4 +41,19 @@ async function getVendorIdByUuid(uuid) {
   return data ? { id: data.id, role: data.role } : null;
 }
 
-module.exports = { applySearchAndPagination, getVendorIdByUuid }; 
+/**
+ * Gets vendor details (id, name, phone) based on uuid.
+ * @param {string} uuid - The uuid to search for (vendor's user id)
+ * @returns {Promise<{id: string, name: string, phone: string, role: string|null}|null>} - The vendor details if found, or null if not found
+ */
+async function getVendorDetailsById(uuid) {
+  const { data, error } = await supabase
+    .from('vendors')
+    .select('id, name, phone, role')
+    .eq('id', uuid)
+    .maybeSingle();
+  if (error) throw error;
+  return data ? data : null;
+}
+
+module.exports = { applySearchAndPagination, getVendorIdByUuid, getVendorDetailsById }; 
