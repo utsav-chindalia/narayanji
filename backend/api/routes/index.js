@@ -26,5 +26,6 @@ router.use('/check-vendor', require('./vendor'));
 router.use('/catalog', require('./catalog'));
 router.use('/cart', require('./cart'));
 router.use('/orders', require('./orders'));
+router.use('/work-orders', require('./workOrders'));
 
 module.exports = router; 

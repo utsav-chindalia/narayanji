@@ -1,6 +1,7 @@
 const supabase = require('../config/supabaseClient');
 const { applySearchAndPagination, getVendorIdByUuid, getVendorDetailsById } = require('./utils');
 const config = require('../config');
+const { v4: uuidv4 } = require('uuid');
 
 function isUUID(str) {
   return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(str);
@@ -197,7 +198,7 @@ async function confirmOrderPayment(orderId, user) {
       }
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     console.error('Razorpay payment link creation failed', { orderId, vendorId: order.vendor_id, err: err.message });
     throw { status: 500, message: 'Failed to create payment link. Please try again.' };
   }
@@ -219,11 +220,25 @@ async function confirmOrderPayment(orderId, user) {
     if (insertError) throw insertError;
     paymentRecord = inserted;
   } catch (err) {
+    console.error(err);
     console.error('Failed to insert payment record', { orderId, err: err.message });
     throw { status: 500, message: 'Failed to store payment record. Please try again.' };
   }
 
-  // 8. Return all details
+  // 8. Update order status to 'approved'
+  try {
+    const { error: updateOrderError } = await supabase
+      .from('orders')
+      .update({ status: 'payment_pending' })
+      .eq('id', orderId);
+    if (updateOrderError) throw updateOrderError;
+  } catch (err) {
+    console.error(err);
+    console.error('Failed to update order status to approved', { orderId, err: err.message });
+    throw { status: 500, message: 'Failed to update order status. Please try again.' };
+  }
+
+  // 9. Return all details
   return {
     success: true,
     razorpayOrder: {
@@ -243,4 +258,53 @@ async function confirmOrderPayment(orderId, user) {
   };
 }
 
-module.exports = { listOrders, getOrderItems, confirmOrderPayment }; 
+/**
+ * Review order: update approved quantities and generate work orders
+ * @param {string} orderId
+ * @param {Array} items - [{ sku, approvedQuantityKg }]
+ * @param {object} user
+ * @returns {Promise<object>} - Success message
+ */
+async function reviewOrder(orderId, items, user) {
+  // 1. Validate user and order
+  if (!user || !user.id) {
+    throw { status: 401, message: 'Unauthorized: Missing user id' };
+  }
+  // Fetch user role
+  const vendor = await getVendorIdByUuid(user.id);
+  const role = vendor ? vendor.role : null;
+  if (role !== 'admin') {
+    throw { status: 403, message: 'Forbidden: Only admin can perform this action' };
+  }
+  // Fetch order
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .maybeSingle();
+  if (orderError) throw orderError;
+  if (!order) throw { status: 404, message: 'Order not found' };
+
+  // 2. Update approved quantities for each item
+  for (const item of items) {
+    const { sku, approvedQuantityKg } = item;
+    if (!sku || typeof approvedQuantityKg !== 'number') continue;
+    const { error: updateError } = await supabase
+      .from('order_items')
+      .update({ approved_quantity_kg: approvedQuantityKg })
+      .eq('order_id', orderId)
+      .eq('sku', sku);
+    if (updateError) throw updateError;
+  }
+
+  // 3. Set order status to 'reviewed'
+  const { error: updateOrderError } = await supabase
+    .from('orders')
+    .update({ status: 'approved', last_updated: new Date().toISOString() })
+    .eq('id', orderId);
+  if (updateOrderError) throw updateOrderError;
+
+  return { success: true, message: 'Order reviewed successfully' };
+}
+
+module.exports = { listOrders, getOrderItems, confirmOrderPayment, reviewOrder }; 

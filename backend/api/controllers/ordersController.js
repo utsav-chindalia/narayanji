@@ -53,4 +53,19 @@ exports.confirmOrderPayment = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+/**
+ * PUT /api/orders/:orderId/review
+ * Admin updates approved quantities after reviewing order
+ */
+exports.reviewOrder = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const { items } = req.body;
+    const result = await ordersService.reviewOrder(orderId, items, req.user);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 }; 
