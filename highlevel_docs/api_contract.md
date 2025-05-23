@@ -196,6 +196,16 @@ Response:
 ]
 
 
+GET /orders/:orderId/payment
+Returns the payment link and the total payment value to vendor
+Response:
+[
+  {
+    payment_url: "https://rzp.io/rzp/Jdi0JBU",
+    payment_tota: ""
+  }
+]
+
 
 Swagger API: https://docs.google.com/document/d/1T36H2ZuD9Qo23WUO-u9CFKoCWeDXQpIZeAjPssQrL3M/edit?tab=t.9pgkl0r8rwdt 
 

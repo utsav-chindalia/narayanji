@@ -14,4 +14,7 @@ router.post('/:orderId/confirm', ordersController.confirmOrderPayment);
 // PUT /api/orders/:orderId/review
 router.put('/:orderId/review', ordersController.reviewOrder);
 
+// GET /api/orders/:orderId/payment
+router.get('/:orderId/payment', ordersController.getOrderPaymentInfo);
+
 module.exports = router; 

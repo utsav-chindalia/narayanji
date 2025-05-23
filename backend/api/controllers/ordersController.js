@@ -68,4 +68,18 @@ exports.reviewOrder = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+/**
+ * GET /api/orders/:orderId/payment
+ * Returns payment link and total for the given orderId
+ */
+exports.getOrderPaymentInfo = async (req, res, next) => {
+  try {
+    const { orderId } = req.params;
+    const result = await ordersService.getOrderPaymentInfo(orderId);
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 }; 

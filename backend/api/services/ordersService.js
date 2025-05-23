@@ -87,7 +87,7 @@ async function getOrderItems(orderId, pricingTier) {
   // Fetch order items with product info
   const { data: items, error: itemsError } = await supabase
     .from('order_items')
-    .select('sku, quantity_kg, product:products(sku, name, category, price_per_kg, gst_percent)')
+    .select('sku, quantity_kg, approved_quantity_kg, product:products(sku, name, category, price_per_kg, gst_percent)')
     .eq('order_id', orderId);
   if (itemsError) throw itemsError;
   if (!items || items.length === 0) return [];
@@ -104,6 +104,7 @@ async function getOrderItems(orderId, pricingTier) {
   return items.map(item => ({
     sku: item.sku,
     quantity_kg: item.quantity_kg,
+    approved_quantity_kg: item.approved_quantity_kg,
     product_name: item.product?.name || '',
     pricing_tier: pricingTier,
     price_per_kg: item.product ? Math.round((item.product.price_per_kg * (1 - discount)) * 100) / 100 : '',
@@ -146,10 +147,11 @@ async function confirmOrderPayment(orderId, user) {
   const items = await getOrderItems(orderId, pricingTier);
   if (!items.length) throw { status: 400, message: 'Order has no items' };
 
-  // 3. Calculate total amount (sum of price_per_kg * quantity_kg for all items)
+  // 3. Calculate total amount (sum of price_per_kg * approved_quantity_kg for all items)
   let total = 0;
   for (const item of items) {
-    total += (parseFloat(item.price_per_kg) || 0) * (parseFloat(item.quantity_kg) || 0);
+    const qty = item.approved_quantity_kg != null ? item.approved_quantity_kg : item.quantity_kg;
+    total += (parseFloat(item.price_per_kg) || 0) * (parseFloat(qty) || 0);
   }
   const amountPaise = Math.round(total * 100);
   if (amountPaise <= 0) throw { status: 400, message: 'Order total is zero' };
@@ -307,4 +309,43 @@ async function reviewOrder(orderId, items, user) {
   return { success: true, message: 'Order reviewed successfully' };
 }
 
-module.exports = { listOrders, getOrderItems, confirmOrderPayment, reviewOrder }; 
+/**
+ * Get payment info for an order: returns payment link and total
+ * @param {string} orderId
+ * @returns {Promise<object>} - Payment link and total
+ */
+async function getOrderPaymentInfo(orderId) {
+  // Fetch order
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .maybeSingle();
+  if (orderError) throw orderError;
+  if (!order) throw { status: 404, message: 'Order not found' };
+
+  // Fetch payment link from payments table
+  const { data: payment, error: paymentError } = await supabase
+    .from('payments')
+    .select('payment_url')
+    .eq('order_id', orderId)
+    .order('created_at', { ascending: false })
+    .maybeSingle();
+  if (paymentError) throw paymentError;
+
+  // Calculate total (sum of price_per_kg * approved_quantity_kg for all items)
+  let total = 0;
+  const pricingTier = order.pricing_tier || 'TIER_1';
+  const items = await getOrderItems(orderId, pricingTier);
+  for (const item of items) {
+    const qty = item.approved_quantity_kg != null ? item.approved_quantity_kg : item.quantity_kg;
+    total += (parseFloat(item.price_per_kg) || 0) * (parseFloat(qty) || 0);
+  }
+
+  return [{
+    payment_url: payment ? payment.payment_url : '',
+    payment_total: total
+  }];
+}
+
+module.exports = { listOrders, getOrderItems, confirmOrderPayment, reviewOrder, getOrderPaymentInfo }; 
