@@ -15,7 +15,7 @@ function applySearchAndPagination(query, { search, searchFields = [], page = 1, 
   if (search && searchFields.length > 0) {
     // Use or() to search across multiple fields
     const orFilters = searchFields
-      .map(field => `${field}.ilike.%${search}%`)
+      .map(field => `${field}.ilike.${search}%`)
       .join(',');
     query = query.or(orFilters);
   }

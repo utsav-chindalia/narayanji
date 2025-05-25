@@ -138,7 +138,7 @@ async function confirmOrderPayment(orderId, user) {
     .maybeSingle();
   if (orderError) throw orderError;
   if (!order) throw { status: 404, message: 'Order not found' };
-  if (order.status !== 'cart' && order.status !== 'pending') {
+  if (order.status === 'cart' && order.status === 'pending') {
     throw { status: 400, message: 'Order is not payable' };
   }
 

@@ -30,13 +30,15 @@ describe('GET /api/catalog', () => {
   it('should return catalog with expected structure', async () => {
     const res = await request(app).get('/api/catalog');
     expect(res.statusCode).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body[0]).toHaveProperty('sku');
-    expect(res.body[0]).toHaveProperty('name');
-    expect(res.body[0]).toHaveProperty('category');
-    expect(res.body[0]).toHaveProperty('unitType');
-    expect(res.body[0]).toHaveProperty('imageUrl');
-    expect(res.body[0]).toHaveProperty('pricePerKg');
-    expect(res.body[0]).toHaveProperty('gstPercent');
+    expect(typeof res.body).toBe('object');
+    expect(Array.isArray(res.body.products)).toBe(true);
+    expect(typeof res.body.total).toBe('number');
+    expect(res.body.products[0]).toHaveProperty('sku');
+    expect(res.body.products[0]).toHaveProperty('name');
+    expect(res.body.products[0]).toHaveProperty('category');
+    expect(res.body.products[0]).toHaveProperty('unitType');
+    expect(res.body.products[0]).toHaveProperty('imageUrl');
+    expect(res.body.products[0]).toHaveProperty('pricePerKg');
+    expect(res.body.products[0]).toHaveProperty('gstPercent');
   });
 }); 

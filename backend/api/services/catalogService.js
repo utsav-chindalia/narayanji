@@ -11,10 +11,15 @@ const { applySearchAndPagination } = require('./utils');
  * @returns {Promise<Array>} - List of products with vendor-specific pricing.
  */
 async function getCatalog(pricingTier, { search, page = 1, pageSize = 20 } = {}) {
+  // If searching, override pageSize to a large number to return all matches
+  if (search) {
+    page = 1;
+    pageSize = 1000; // or any large number that covers all possible results
+  }
   // Build base query
   let query = supabase
     .from('products')
-    .select('sku, name, category, unit_type, image_url, price_per_kg, gst_percent');
+    .select('sku, name, category, unit_type, image_url, price_per_kg, gst_percent', { count: 'exact' });
 
   // Apply search and pagination
   query = applySearchAndPagination(query, {
@@ -23,8 +28,8 @@ async function getCatalog(pricingTier, { search, page = 1, pageSize = 20 } = {})
     page,
     pageSize
   });
-
-  const { data: products, error: prodError } = await query;
+  console.log(query);
+  const { data: products, error: prodError, count: total } = await query;
   if (prodError) throw prodError;
 
   // Fetch discount for the pricing tier
@@ -37,7 +42,7 @@ async function getCatalog(pricingTier, { search, page = 1, pageSize = 20 } = {})
   const discount = tier ? parseFloat(tier.discount_pct) : 0;
 
   // Map products with discounted price
-  return (products || []).map(p => ({
+  const mappedProducts = (products || []).map(p => ({
     sku: p.sku,
     name: p.name,
     category: p.category,
@@ -46,6 +51,11 @@ async function getCatalog(pricingTier, { search, page = 1, pageSize = 20 } = {})
     pricePerKg: Math.round((p.price_per_kg * (1 - discount)) * 100) / 100,
     gstPercent: parseFloat(p.gst_percent)
   }));
+
+  return {
+    products: mappedProducts,
+    total: total || 0
+  };
 }
 
 module.exports = { getCatalog }; 

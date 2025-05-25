@@ -12,12 +12,12 @@ exports.getCatalog = async (req, res, next) => {
   try {
     const pricingTier = req.user && req.user.pricingTier ? req.user.pricingTier : 'TIER_1';
     const { search, page = 1, pageSize = 20 } = req.query;
-    const catalog = await catalogService.getCatalog(pricingTier, {
+    const catalogResult = await catalogService.getCatalog(pricingTier, {
       search,
       page: Number(page) || 1,
       pageSize: Number(pageSize) || 20
     });
-    res.json(catalog);
+    res.json(catalogResult);
   } catch (error) {
     next(error);
   }
