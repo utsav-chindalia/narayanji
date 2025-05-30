@@ -1,11 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const app = express();
 const config = require('./config');
 const routes = require('./routes');
 
 app.use(express.json());
 app.use(morgan('dev'));
+app.use(cors());
 
 app.use('/api', routes);
 
